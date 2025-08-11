@@ -25,4 +25,18 @@ public class StoreTest {
         
         Assertions.assertEquals(3, product.getQuantity());
     }
+    
+    @Test
+    void testBuyProductOutOfStock() {
+        AccountManager accountManager = mock(AccountManager.class);
+        when(accountManager.withdraw(any(), anyInt())).thenReturn("success");
+        Store store = new StoreImpl(accountManager);
+        Product product = new Product();
+        product.setQuantity(0);
+        Customer customer = new Customer();
+        
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            store.buy(product, customer);
+        });
+    }
 }

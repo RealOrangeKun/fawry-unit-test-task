@@ -16,4 +16,27 @@ public class AccountManagerTest {
         Assertions.assertEquals("success", result);
         Assertions.assertEquals(500, c.getBalance());
     }
+    
+    @Test
+    void testWithdrawWithInsufficientBalance() {
+        AccountManager am = new AccountManagerImpl();
+        Customer c = new Customer();
+        c.setBalance(100);
+        
+        String result = am.withdraw(c, 200);
+        
+        Assertions.assertEquals("insufficient account balance", result);
+        Assertions.assertEquals(100, c.getBalance());
+    }
+    
+    @Test
+    void testDeposit() {
+        AccountManager am = new AccountManagerImpl();
+        Customer c = new Customer();
+        c.setBalance(100);
+        
+        am.deposit(c, 50);
+        
+        Assertions.assertEquals(150, c.getBalance());
+    }
 }
