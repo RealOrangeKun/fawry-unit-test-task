@@ -8,6 +8,7 @@ public class AccountManagerImpl implements AccountManager {
 
     @Override
     public String withdraw(Customer customer, int amount) {
-        return null;
+        customer.setBalance(customer.getBalance() - amount);
+        return "success";
     }
 }

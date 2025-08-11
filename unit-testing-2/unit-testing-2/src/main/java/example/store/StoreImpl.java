@@ -12,6 +12,6 @@ public class StoreImpl implements Store {
     
     @Override
     public void buy(Product product, Customer customer) {
-        
+        product.setQuantity(product.getQuantity() - 1);
     }
 }
