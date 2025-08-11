@@ -1,6 +1,9 @@
 package example.account;
 
 public class AccountManagerImpl implements AccountManager {
+    private static final String SUCCESS = "success";
+    private static final String INSUFFICIENT_BALANCE = "insufficient account balance";
+    
     @Override
     public void deposit(Customer customer, int amount) {
         customer.setBalance(customer.getBalance() + amount);
@@ -11,10 +14,10 @@ public class AccountManagerImpl implements AccountManager {
         int expectedBalance = customer.getBalance() - amount;
         
         if (expectedBalance < 0) {
-            return "insufficient account balance";
+            return INSUFFICIENT_BALANCE;
         }
         
         customer.setBalance(expectedBalance);
-        return "success";
+        return SUCCESS;
     }
 }

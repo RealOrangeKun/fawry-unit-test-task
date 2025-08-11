@@ -4,7 +4,11 @@ import example.account.AccountManager;
 import example.account.Customer;
 
 public class StoreImpl implements Store {
-    AccountManager accountManager;
+    private static final String SUCCESS = "success";
+    private static final String OUT_OF_STOCK_MESSAGE = "Product out of stock";
+    private static final String PAYMENT_FAILURE_MESSAGE = "Payment failure: ";
+    
+    private final AccountManager accountManager;
     
     public StoreImpl(AccountManager accountManager) {
         this.accountManager = accountManager;
@@ -12,15 +16,23 @@ public class StoreImpl implements Store {
     
     @Override
     public void buy(Product product, Customer customer) {
-        if (product.getQuantity() == 0) {
-            throw new RuntimeException("Product out of stock");
+        if (isOutOfStock(product)) {
+            throw new RuntimeException(OUT_OF_STOCK_MESSAGE);
         }
         
         String status = accountManager.withdraw(customer, product.getPrice());
-        if (!status.equals("success")) {
-            throw new RuntimeException("Payment failure: " + status);
+        if (!SUCCESS.equals(status)) {
+            throw new RuntimeException(PAYMENT_FAILURE_MESSAGE + status);
         }
         
+        decreaseProductQuantity(product);
+    }
+    
+    private boolean isOutOfStock(Product product) {
+        return product.getQuantity() == 0;
+    }
+    
+    private void decreaseProductQuantity(Product product) {
         product.setQuantity(product.getQuantity() - 1);
     }
 }
